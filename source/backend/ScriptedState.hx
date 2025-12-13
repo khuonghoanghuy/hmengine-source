@@ -121,8 +121,6 @@ class ScriptedState extends FlxState
 		var scriptToLoad:String = Paths.getSharedPath(scriptFile);
 		#end
 
-        trace(scriptFile);
-        
 		if(FileSystem.exists(scriptToLoad))
 		{
 			if (Iris.instances.exists(scriptToLoad)) return false;

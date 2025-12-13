@@ -174,6 +174,14 @@ class MusicBeatState extends ScriptedState
 			stage.stepHit();
 		});
 
+		#if HSCRIPT_ALLOWED
+		for (script in hscriptArray)
+			if(script != null)
+			{
+				if(script.exists('onStepHit')) script.call('onStepHit', []);
+			}
+		#end
+
 		if (curStep % 4 == 0)
 			beatHit();
 	}
@@ -187,6 +195,14 @@ class MusicBeatState extends ScriptedState
 			stage.curDecBeat = curDecBeat;
 			stage.beatHit();
 		});
+
+		#if HSCRIPT_ALLOWED
+		for (script in hscriptArray)
+			if(script != null)
+			{
+				if(script.exists('onBeatHit')) script.call('onBeatHit', []);
+			}
+		#end
 	}
 
 	public function sectionHit():Void
@@ -196,6 +212,14 @@ class MusicBeatState extends ScriptedState
 			stage.curSection = curSection;
 			stage.sectionHit();
 		});
+
+		#if HSCRIPT_ALLOWED
+		for (script in hscriptArray)
+			if(script != null)
+			{
+				if(script.exists('onSectionHit')) script.call('onSectionHit', []);
+			}
+		#end
 	}
 
 	function stagesFunc(func:BaseStage->Void)

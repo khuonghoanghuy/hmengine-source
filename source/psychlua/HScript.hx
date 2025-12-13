@@ -170,7 +170,6 @@ class HScript extends Iris
 		set('Character', Character);
 		set('Alphabet', Alphabet);
 		set('Note', objects.Note);
-		set('CustomSubstate', CustomSubstate);
 		#if (!flash && sys)
 		set('FlxRuntimeShader', flixel.addons.display.FlxRuntimeShader);
 		set('ErrorHandledRuntimeShader', shaders.ErrorHandledShader.ErrorHandledRuntimeShader);
@@ -180,6 +179,9 @@ class HScript extends Iris
 		#if flxanimate
 		set('FlxAnimate', FlxAnimate);
 		#end
+		set('CustomState', CustomState);
+		set('CustomSubstate', CustomSubstate);
+		set('MusicBeatState', MusicBeatState);
 
 		// Functions & Variables
 		set('setVar', function(name:String, value:Dynamic) {

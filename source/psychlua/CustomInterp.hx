@@ -1,3 +1,12 @@
+package psychlua;
+
+import crowplexus.iris.Iris;
+import crowplexus.iris.IrisConfig;
+import crowplexus.hscript.Expr.Error as IrisError;
+import crowplexus.hscript.Printer;
+
+import haxe.ValueException;
+
 class CustomInterp extends crowplexus.hscript.Interp
 {
 	public var parentInstance(default, set):Dynamic = [];

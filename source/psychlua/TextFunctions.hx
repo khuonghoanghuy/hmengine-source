@@ -1,5 +1,7 @@
 package psychlua;
 
+import psychlua.states.CustomSubstate;
+
 class TextFunctions
 {
 	public static function implement(funk:FunkinLua)

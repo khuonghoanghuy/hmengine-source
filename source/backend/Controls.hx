@@ -82,6 +82,10 @@ class Controls
 	private function get_PAUSE() return justPressed('pause');
 	private function get_RESET() return justPressed('reset');
 
+	// Pressed buttons (modding)
+	public var RELOAD_STATE(get, never):Bool;
+	private function get_RELOAD_STATE() return justPressed('reload_state');
+
 	//Gamepad & Keyboard stuff
 	public var keyboardBinds:Map<String, Array<FlxKey>>;
 	public var gamepadBinds:Map<String, Array<FlxGamepadInputID>>;

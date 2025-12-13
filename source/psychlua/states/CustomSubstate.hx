@@ -1,4 +1,4 @@
-package psychlua;
+package psychlua.states;
 
 import flixel.FlxObject;
 

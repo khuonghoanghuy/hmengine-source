@@ -3,7 +3,7 @@ package backend;
 import flixel.FlxState;
 import backend.PsychCamera;
 
-class MusicBeatState extends FlxState
+class MusicBeatState extends ScriptedState
 {
 	private var curSection:Int = 0;
 	private var stepsToDo:Int = 0;
@@ -13,17 +13,16 @@ class MusicBeatState extends FlxState
 
 	private var curDecStep:Float = 0;
 	private var curDecBeat:Float = 0;
-	public var controls(get, never):Controls;
-	private function get_controls()
-	{
-		return Controls.instance;
-	}
 
 	var _psychCameraInitialized:Bool = false;
 
 	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
 	public static function getVariables()
 		return getState().variables;
+
+	public function new() {
+		super();
+	}
 
 	override function create() {
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;

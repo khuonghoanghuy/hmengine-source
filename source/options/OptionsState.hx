@@ -11,8 +11,9 @@ class OptionsState extends MusicBeatState
 		'Adjust Delay and Combo',
 		'Graphics',
 		'Visuals',
-		'Gameplay'
-		#if TRANSLATIONS_ALLOWED , 'Language' #end
+		'Gameplay',
+		#if TRANSLATIONS_ALLOWED 'Language', #end
+		'Modding'
 	];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
@@ -23,19 +24,21 @@ class OptionsState extends MusicBeatState
 		switch(label)
 		{
 			case 'Note Colors':
-				openSubState(new options.NotesColorSubState());
+				openSubState(new NotesColorSubState());
 			case 'Controls':
-				openSubState(new options.ControlsSubState());
+				openSubState(new ControlsSubState());
 			case 'Graphics':
-				openSubState(new options.GraphicsSettingsSubState());
+				openSubState(new GraphicsSettingsSubState());
 			case 'Visuals':
-				openSubState(new options.VisualsSettingsSubState());
+				openSubState(new VisualsSettingsSubState());
 			case 'Gameplay':
-				openSubState(new options.GameplaySettingsSubState());
+				openSubState(new GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
-				MusicBeatState.switchState(new options.NoteOffsetState());
+				MusicBeatState.switchState(new NoteOffsetState());
 			case 'Language':
-				openSubState(new options.LanguageSubState());
+				openSubState(new LanguageSubState());
+			case 'Modding':
+				openSubState(new ModdingSettingsSubState());
 		}
 	}
 

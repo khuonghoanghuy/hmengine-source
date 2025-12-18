@@ -79,6 +79,7 @@ import states.TitleState;
 	public var language:String = 'en-US';
 
 	public var allowReloadState:Bool = true;
+	public var allowConsole:Bool = false;
 }
 
 class ClientPrefs {
@@ -110,7 +111,8 @@ class ClientPrefs {
 		'debug_1'		=> [SEVEN],
 		'debug_2'		=> [EIGHT],
 
-		'reload_state'	=> [F5]
+		'reload_state'	=> [F5],
+		'open_console' => [F2]
 	];
 	public static var gamepadBinds:Map<String, Array<FlxGamepadInputID>> = [
 		'note_up'		=> [DPAD_UP, Y],

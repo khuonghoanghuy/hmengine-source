@@ -44,7 +44,8 @@ class ControlsSubState extends MusicBeatSubstate
 		[false, 'Key 2', 'debug_2', 'Debug Key #2'],
 		[false],
 		[false, 'MODDING'],
-		[false, 'Reload state', 'reload_state', 'Reload state']
+		[false, 'Reload state', 'reload_state', 'Reload state'],
+		[false, 'Open Console', 'open_console', 'Open Console']
 	];
 	var curOptions:Array<Int>;
 	var curOptionsValid:Array<Int>;

@@ -1,5 +1,7 @@
 package;
 
+import flixel.input.keyboard.FlxKey;
+import openfl.events.KeyboardEvent;
 #if android
 import android.content.Context;
 #end
@@ -199,6 +201,15 @@ class Main extends Sprite
 			if (FlxG.game != null)
 			resetSpriteCache(FlxG.game);
 		});
+
+		addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+	}
+
+	function onKeyDown(event:KeyboardEvent)
+	{
+		if (event.keyCode == FlxKey.F2) {
+			backend.Native.showConsole(ClientPrefs.data.allowConsole);
+		}
 	}
 
 	static function resetSpriteCache(sprite:Sprite):Void {

@@ -1,5 +1,10 @@
 package backend;
 
+#if windows
+import winapi.WindowsCPP;
+import winapi.WindowsTerminalCPP;
+#end
+
 import lime.app.Application;
 import lime.system.Display;
 import lime.system.System;
@@ -113,4 +118,12 @@ class Native
 		');
 		#end
 	}
+
+	#if windows
+	public static function showConsole(enable:Bool = false):Void
+	{
+		WindowsCPP.reDefineMainWindowTitle(lime.app.Application.current.window.title);
+		if (enable) WindowsTerminalCPP.allocConsole();
+	}
+	#end
 }

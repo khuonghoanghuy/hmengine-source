@@ -833,7 +833,6 @@ class PlayState extends MusicBeatState
 			return videoCutscene;
 		}
 		else FlxG.log.error("Video not found: " + fileName);
-		#end
 		#else
 		FlxG.log.warn('Platform not supported!');
 		startAndEnd();

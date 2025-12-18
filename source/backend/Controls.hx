@@ -84,7 +84,9 @@ class Controls
 
 	// Pressed buttons (modding)
 	public var RELOAD_STATE(get, never):Bool;
+	public var OPEN_CONSOLE(get, never):Bool;
 	private function get_RELOAD_STATE() return justPressed('reload_state');
+	private function get_OPEN_CONSOLE() return justPressed('open_console');
 
 	//Gamepad & Keyboard stuff
 	public var keyboardBinds:Map<String, Array<FlxKey>>;

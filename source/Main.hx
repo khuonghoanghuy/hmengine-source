@@ -202,12 +202,13 @@ class Main extends Sprite
 			resetSpriteCache(FlxG.game);
 		});
 
-		addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		// addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 	}
-
+	
 	function onKeyDown(event:KeyboardEvent)
 	{
-		if (event.keyCode == FlxKey.F2) {
+		if (event.keyCode == 113) {
 			backend.Native.showConsole(ClientPrefs.data.allowConsole);
 		}
 	}

@@ -34,7 +34,6 @@ import psychlua.LuaUtils.LuaTweenOptions;
 #if HSCRIPT_ALLOWED
 import psychlua.HScript;
 #end
-import psychlua.DebugLuaText;
 import psychlua.ModchartSprite;
 import psychlua.states.CustomSubstate;
 
@@ -1547,7 +1546,9 @@ class FunkinLua {
 		});
 		//
 
-		Lua_helper.add_callback(lua, "debugPrint", function(text:Dynamic = '', color:String = 'WHITE') PlayState.instance.addTextToDebug(text, CoolUtil.colorFromString(color)));
+		Lua_helper.add_callback(lua, "debugPrint", function(text:Dynamic = '', color:String = "WHITE") {
+			trace(text);
+		});
 
 		addLocalCallback("close", function() {
 			closed = true;
@@ -1731,7 +1732,7 @@ class FunkinLua {
 			if(deprecated && !getBool('luaDeprecatedWarnings')) {
 				return;
 			}
-			PlayState.instance.addTextToDebug(text, color);
+			trace(text);
 		}
 	}
 

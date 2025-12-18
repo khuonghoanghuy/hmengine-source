@@ -110,8 +110,7 @@ class Main extends Sprite
 				msgInfo += '${newPos.lineNumber}:';
 			}
 			msgInfo += ' $x';
-			if (PlayState.instance != null)
-				PlayState.instance.addTextToDebug('WARNING: $msgInfo', FlxColor.YELLOW);
+			trace('WARNING: $msgInfo');
 		}
 		Iris.error = function(x, ?pos:haxe.PosInfos) {
 			Iris.logLevel(ERROR, x, pos);
@@ -128,8 +127,7 @@ class Main extends Sprite
 				msgInfo += '${newPos.lineNumber}:';
 			}
 			msgInfo += ' $x';
-			if (PlayState.instance != null)
-				PlayState.instance.addTextToDebug('ERROR: $msgInfo', FlxColor.RED);
+			trace('ERROR: $msgInfo');
 		}
 		Iris.fatal = function(x, ?pos:haxe.PosInfos) {
 			Iris.logLevel(FATAL, x, pos);
@@ -146,8 +144,7 @@ class Main extends Sprite
 				msgInfo += '${newPos.lineNumber}:';
 			}
 			msgInfo += ' $x';
-			if (PlayState.instance != null)
-				PlayState.instance.addTextToDebug('FATAL: $msgInfo', 0xFFBB0000);
+			trace('FATAL: $msgInfo');
 		}
 		#end
 

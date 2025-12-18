@@ -204,7 +204,7 @@ class HScript extends Iris
 		});
 		set('debugPrint', function(text:String, ?color:FlxColor = null) {
 			if(color == null) color = FlxColor.WHITE;
-			PlayState.instance.addTextToDebug(text, color);
+			trace(text);
 		});
 		set('getModSetting', function(saveTag:String, ?modName:String = null) {
 			if(modName == null)
@@ -534,15 +534,15 @@ class HScript
 	#if LUA_ALLOWED
 	public static function implement(funk:FunkinLua) {
 		funk.addLocalCallback("runHaxeCode", function(codeToRun:String, ?varsToBring:Any = null, ?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):Dynamic {
-			PlayState.instance.addTextToDebug('HScript is not supported on this platform!', FlxColor.RED);
+			trace('HScript is not supported on this platform!');
 			return null;
 		});
 		funk.addLocalCallback("runHaxeFunction", function(funcToRun:String, ?funcArgs:Array<Dynamic> = null) {
-			PlayState.instance.addTextToDebug('HScript is not supported on this platform!', FlxColor.RED);
+			trace('HScript is not supported on this platform!');
 			return null;
 		});
 		funk.addLocalCallback("addHaxeLibrary", function(libName:String, ?libPackage:String = '') {
-			PlayState.instance.addTextToDebug('HScript is not supported on this platform!', FlxColor.RED);
+			trace('HScript is not supported on this platform!');
 			return null;
 		});
 	}

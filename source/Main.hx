@@ -202,7 +202,7 @@ class Main extends Sprite
 		// addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 	}
-	
+
 	function onKeyDown(event:KeyboardEvent)
 	{
 		if (event.keyCode == 113) {

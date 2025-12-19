@@ -402,7 +402,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		if(chartEditorSave.data.infoBoxPosition != null && chartEditorSave.data.infoBoxPosition.length > 1)
 			infoBox.setPosition(chartEditorSave.data.infoBoxPosition[0], chartEditorSave.data.infoBoxPosition[1]);
 
-		upperBox = new PsychUIBox(40, 40, 330, 300, ['File', 'Edit', 'View']);
+		upperBox = new PsychUIBox(40, 40, 330, 300, ['File', 'Edit', 'View', 'Editor']);
 		upperBox.scrollFactor.set();
 		upperBox.isMinimized = true;
 		upperBox.minimizeOnFocusLost = true;
@@ -439,6 +439,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		addFileTab();
 		addEditTab();
 		addViewTab();
+		addEditorTab();
 		//
 
 		loadMusic();
@@ -4550,6 +4551,33 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			mainBox.setPosition(mainBoxPosition.x, mainBoxPosition.y);
 			infoBox.setPosition(infoBoxPosition.x, infoBoxPosition.y);
 			UIEvent(PsychUIBox.DROP_EVENT, btn); //to force a save
+		}, btnWid);
+		btn.text.alignment = LEFT;
+		tab_group.add(btn);
+	}
+
+	function addEditorTab()
+	{
+		var tab = upperBox.getTab('Editor');
+		var tab_group = tab.menu;
+		var btnX = tab.x - upperBox.x;
+		var btnY = 1;
+		var btnWid = Std.int(tab.width);
+
+		var btn:PsychUIButton = new PsychUIButton(btnX, btnY, '  Mouse Scroll Speed', function()
+		{
+			if(!fileDialog.completed) return;
+			upperBox.isMinimized = true;
+			upperBox.bg.visible = false;
+
+			openSubState(new BasePrompt(500, 260, 'Mouse Scroll Speed', function (state:BasePrompt)
+			{
+				var btn:PsychUIButton = new PsychUIButton(0, state.bg.y + state.bg.height - 50, 'Cancel', state.close);
+				btn.cameras = state.cameras;
+				btn.screenCenter(X);
+				btn.x += 60;
+				state.add(btn);
+			}));
 		}, btnWid);
 		btn.text.alignment = LEFT;
 		tab_group.add(btn);

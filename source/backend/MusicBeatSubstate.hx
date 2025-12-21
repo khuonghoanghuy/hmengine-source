@@ -7,6 +7,33 @@ class MusicBeatSubstate extends ScriptedSubstate
 	public function new()
 	{
 		super();
+
+		if (parentState != null)
+			parentState.active = true;
+	}
+
+	override function close() {
+		// Reactivate the parent state when this substate closes
+		if (parentState != null)
+			parentState.active = true;
+		
+		super.close();
+	}
+
+	override function closeSubState() {
+		// Reactivate the parent state when this substate closes
+		if (parentState != null)
+			parentState.active = true;
+		
+		super.closeSubState();
+	}
+
+	override function destroy() {
+		// Make sure to reactivate parent state on destroy too
+		if (parentState != null && !parentState.active)
+			parentState.active = true;
+		
+		super.destroy();
 	}
 
 	private var curSection:Int = 0;

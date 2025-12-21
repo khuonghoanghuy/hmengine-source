@@ -64,12 +64,6 @@ class TitleState extends MusicBeatState
 	var easterEggKeysBuffer:String = '';
 	#end
 
-	public function new() {
-		super();
-
-		loadStateScripts('TitleState');
-	}
-
 	override public function create():Void
 	{
 		Paths.clearStoredMemory();

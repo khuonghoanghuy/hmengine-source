@@ -16,11 +16,11 @@ class AchievementsMenuState extends MusicBeatState
 	public var progressTxt:FlxText;
 	public var progressBar:Bar;
 
-	var camFollow:FlxObject;
+	public var camFollow:FlxObject;
 
-	var MAX_PER_ROW:Int = 4;
+	public var MAX_PER_ROW:Int = 4;
 
-	override function create()
+	override public function create()
 	{
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
@@ -127,7 +127,7 @@ class AchievementsMenuState extends MusicBeatState
 		FlxG.camera.scroll.y = -FlxG.height;
 	}
 
-	function makeAchievement(achievement:String, data:Achievement, unlocked:Bool, mod:String = null)
+	public function makeAchievement(achievement:String, data:Achievement, unlocked:Bool, mod:String = null):Dynamic
 	{
 		return {
 			name: achievement,
@@ -145,8 +145,8 @@ class AchievementsMenuState extends MusicBeatState
 	public static function sortByID(Obj1:Dynamic, Obj2:Dynamic):Int
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.ID, Obj2.ID);
 
-	var goingBack:Bool = false;
-	override function update(elapsed:Float) {
+	public var goingBack:Bool = false;
+	override public function update(elapsed:Float) {
 		if(!goingBack && options.length > 1)
 		{
 			var add:Int = 0;
@@ -212,7 +212,7 @@ class AchievementsMenuState extends MusicBeatState
 	}
 
 	public var barTween:FlxTween = null;
-	function _changeSelection()
+	public function _changeSelection():Void
 	{
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 		var hasProgress = options[curSelected].maxProgress > 0;
@@ -252,9 +252,9 @@ class AchievementsMenuState extends MusicBeatState
 
 class ResetAchievementSubstate extends MusicBeatSubstate
 {
-	var onYes:Bool = false;
-	var yesText:Alphabet;
-	var noText:Alphabet;
+	public var onYes:Bool = false;
+	public var yesText:Alphabet;
+	public var noText:Alphabet;
 
 	public function new()
 	{
@@ -292,7 +292,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		updateOptions();
 	}
 
-	override function update(elapsed:Float)
+	override public function update(elapsed:Float)
 	{
 		if(controls.BACK)
 		{
@@ -342,7 +342,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		}
 	}
 
-	function updateOptions() {
+	public function updateOptions():Void {
 		var scales:Array<Float> = [0.75, 1];
 		var alphas:Array<Float> = [0.6, 1.25];
 		var confirmInt:Int = onYes ? 1 : 0;

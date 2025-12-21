@@ -24,6 +24,8 @@ class ScriptedState extends FlxState
     override function create() {
         super.create();
 
+		loadStateScripts(Type.getClassName(Type.getClass(this)).split('.').pop());
+
 		#if HSCRIPT_ALLOWED
 		for (script in hscriptArray)
 			if(script != null)
@@ -31,7 +33,7 @@ class ScriptedState extends FlxState
 				if(script.exists('onCreate')) script.call('onCreate');
 			}
 		#end
-    }
+	}
 
     override function update(elapsed:Float) {
         if (ClientPrefs.data.allowReloadState) {
@@ -43,7 +45,7 @@ class ScriptedState extends FlxState
                     for (script in hscriptArray)
                         if (script != null)
                         {
-                            if (script.exists('onDestroy')) script.call('onDestroy');
+                            if (script.exists('onReloadState')) script.call('onReloadState');
                             script.destroy();
                         }
                     hscriptArray = [];
@@ -200,6 +202,20 @@ class ScriptedState extends FlxState
 		#end
 
 		return returnVal;
+	}
+	#end
+
+	#if (HSCRIPT_ALLOWED && LUA_ALLOWED)
+	public function callOnScripts(funcToCall:String, args:Array<Dynamic> = null, ignoreStops = false, exclusions:Array<String> = null, excludeValues:Array<Dynamic> = null):Dynamic {
+		var returnVal:Dynamic = LuaUtils.Function_Continue;
+		if(args == null) args = [];
+		if(exclusions == null) exclusions = [];
+		if(excludeValues == null) excludeValues = [LuaUtils.Function_Continue];
+
+		// var result:Dynamic = callOnLuas(funcToCall, args, ignoreStops, exclusions, excludeValues);
+		var result:Dynamic = null;
+		if(result == null || excludeValues.contains(result)) result = callOnHScript(funcToCall, args, ignoreStops, exclusions, excludeValues);
+		return result;
 	}
 	#end
 }

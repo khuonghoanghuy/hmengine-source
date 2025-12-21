@@ -113,7 +113,7 @@ class HScript extends Iris
 		#end
 		super(scriptThing, new IrisConfig(scriptName, false, false));
 		var customInterp:CustomInterp = new CustomInterp();
-		customInterp.parentInstance = FlxG.state;
+		customInterp.parentInstance = MusicBeatState.getState();
 		customInterp.showPosOnLog = false;
 		this.interp = customInterp;
 
@@ -338,12 +338,12 @@ class HScript extends Iris
 		set('parentLua', null);
 		#end
 		set('this', this);
-		set('game', FlxG.state);
+		set('game', MusicBeatState.getState());
 		set('controls', Controls.instance);
 
 		set('buildTarget', LuaUtils.getBuildTarget());
-		set('customSubstate', CustomSubstate.instance);
-		set('customSubstateName', CustomSubstate.name);
+		set('customSubstate', OldCustomSubstate.instance);
+		set('customSubstateName', OldCustomSubstate.name);
 
 		set('Function_Stop', LuaUtils.Function_Stop);
 		set('Function_Continue', LuaUtils.Function_Continue);

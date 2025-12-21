@@ -2,7 +2,7 @@ package backend;
 
 import flixel.FlxSubState;
 
-class MusicBeatSubstate extends FlxSubState
+class MusicBeatSubstate extends ScriptedSubstate
 {
 	public function new()
 	{
@@ -101,18 +101,38 @@ class MusicBeatSubstate extends FlxSubState
 
 	public function stepHit():Void
 	{
+		#if HSCRIPT_ALLOWED
+		for (script in hscriptArray)
+			if(script != null)
+			{
+				if(script.exists('onStepHit')) script.call('onStepHit', []);
+			}
+		#end
+
 		if (curStep % 4 == 0)
 			beatHit();
 	}
 
 	public function beatHit():Void
 	{
-		//do literally nothing dumbass
+		#if HSCRIPT_ALLOWED
+		for (script in hscriptArray)
+			if(script != null)
+			{
+				if(script.exists('onBeatHit')) script.call('onBeatHit', []);
+			}
+		#end
 	}
 	
 	public function sectionHit():Void
 	{
-		//yep, you guessed it, nothing again, dumbass
+		#if HSCRIPT_ALLOWED
+		for (script in hscriptArray)
+			if(script != null)
+			{
+				if(script.exists('onSectionHit')) script.call('onSectionHit', []);
+			}
+		#end
 	}
 	
 	function getBeatsOnSection()

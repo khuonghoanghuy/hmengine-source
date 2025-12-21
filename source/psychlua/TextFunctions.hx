@@ -1,6 +1,6 @@
 package psychlua;
 
-import psychlua.states.CustomSubstate;
+import psychlua.states.OldCustomSubstate as CustomSubstate;
 
 class TextFunctions
 {

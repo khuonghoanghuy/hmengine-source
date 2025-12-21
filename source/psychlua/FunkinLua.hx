@@ -35,7 +35,7 @@ import psychlua.LuaUtils.LuaTweenOptions;
 import psychlua.HScript;
 #end
 import psychlua.ModchartSprite;
-import psychlua.states.CustomSubstate;
+import psychlua.states.OldCustomSubstate as CustomSubstate;
 
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;

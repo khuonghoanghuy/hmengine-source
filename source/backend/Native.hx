@@ -122,7 +122,6 @@ class Native
 	#if windows
 	public static function showConsole(enable:Bool = false):Void
 	{
-		WindowsTerminalCPP.clearTerminal(); // clear it first
 		WindowsCPP.reDefineMainWindowTitle(lime.app.Application.current.window.title);
 		if (enable) WindowsTerminalCPP.allocConsole();
 	}

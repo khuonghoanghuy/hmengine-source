@@ -175,11 +175,11 @@ class MusicBeatState extends ScriptedState
 		});
 
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
-			{
-				if(script.exists('onStepHit')) script.call('onStepHit', []);
-			}
+		// Suspend state HScript callbacks while a substate is active
+		if (subState == null)
+		{
+			if (hscript != null && hscript.exists('onStepHit')) hscript.call('onStepHit', []);
+		}
 		#end
 
 		if (curStep % 4 == 0)
@@ -197,11 +197,11 @@ class MusicBeatState extends ScriptedState
 		});
 
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
-			{
-				if(script.exists('onBeatHit')) script.call('onBeatHit', []);
-			}
+		// Suspend state HScript callbacks while a substate is active
+		if (subState == null)
+		{
+			if (hscript != null && hscript.exists('onBeatHit')) hscript.call('onBeatHit', []);
+		}
 		#end
 	}
 
@@ -214,11 +214,11 @@ class MusicBeatState extends ScriptedState
 		});
 
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
-			{
-				if(script.exists('onSectionHit')) script.call('onSectionHit', []);
-			}
+		// Suspend state HScript callbacks while a substate is active
+		if (subState == null)
+		{
+			if (hscript != null && hscript.exists('onSectionHit')) hscript.call('onSectionHit', []);
+		}
 		#end
 	}
 

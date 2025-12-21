@@ -129,11 +129,7 @@ class MusicBeatSubstate extends ScriptedSubstate
 	public function stepHit():Void
 	{
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
-			{
-				if(script.exists('onStepHit')) script.call('onStepHit', []);
-			}
+		if (hscript != null && hscript.exists('onStepHit')) hscript.call('onStepHit', []);
 		#end
 
 		if (curStep % 4 == 0)
@@ -143,22 +139,14 @@ class MusicBeatSubstate extends ScriptedSubstate
 	public function beatHit():Void
 	{
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
-			{
-				if(script.exists('onBeatHit')) script.call('onBeatHit', []);
-			}
+		if (hscript != null && hscript.exists('onBeatHit')) hscript.call('onBeatHit', []);
 		#end
 	}
 	
 	public function sectionHit():Void
 	{
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
-			{
-				if(script.exists('onSectionHit')) script.call('onSectionHit', []);
-			}
+		if (hscript != null && hscript.exists('onSectionHit')) hscript.call('onSectionHit', []);
 		#end
 	}
 	

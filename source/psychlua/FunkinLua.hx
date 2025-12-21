@@ -274,9 +274,7 @@ class FunkinLua {
 			var hscriptPath:String = findScript(scriptFile, '.hx');
 			if(hscriptPath != null)
 			{
-				for (hscriptInstance in game.hscriptArray)
-					if(hscriptInstance.origin == hscriptPath)
-						return true;
+				if (game.hscript != null && game.hscript.origin == hscriptPath) return true;
 			}
 			#end
 			return false;
@@ -312,13 +310,11 @@ class FunkinLua {
 			var scriptPath:String = findScript(scriptFile, '.hx');
 			if(scriptPath != null)
 			{
-				if(!ignoreAlreadyRunning)
-					for (script in game.hscriptArray)
-						if(script.origin == scriptPath)
-						{
-							luaTrace('addHScript: The script "' + scriptPath + '" is already running!');
-							return;
-						}
+				if(!ignoreAlreadyRunning && game.hscript != null && game.hscript.origin == scriptPath)
+				{
+					luaTrace('addHScript: The script "' + scriptPath + '" is already running!');
+					return;
+				}
 
 				PlayState.instance.initHScript(scriptPath);
 				return;
@@ -354,14 +350,12 @@ class FunkinLua {
 			if(scriptPath != null)
 			{
 				var foundAny:Bool = false;
-				for (script in game.hscriptArray)
+				if (game.hscript != null && game.hscript.origin == scriptPath)
 				{
-					if(script.origin == scriptPath)
-					{
-						trace('Closing hscript $scriptPath');
-						script.destroy();
-						foundAny = true;
-					}
+					trace('Closing hscript $scriptPath');
+					game.hscript.destroy();
+					game.hscript = null;
+					foundAny = true;
 				}
 				if(foundAny) return true;
 			}

@@ -11,9 +11,10 @@ import crowplexus.hscript.Printer;
 
 class ScriptedState extends FlxState
 {
-    #if HSCRIPT_ALLOWED
-    public var hscriptArray:Array<HScript> = [];
-    #end
+	#if HSCRIPT_ALLOWED
+	public var hscript:HScript = null;
+	public var hscriptArray:Array<HScript> = [];
+	#end
 
 	public var controls(get, never):Controls;
 	private function get_controls()
@@ -27,11 +28,14 @@ class ScriptedState extends FlxState
 		loadStateScripts(Type.getClassName(Type.getClass(this)).split('.').pop());
 
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
+		if (hscript != null && hscript.exists('onCreate')) hscript.call('onCreate');
+		if (hscriptArray != null)
+		{
+			for (script in hscriptArray)
 			{
-				if(script.exists('onCreate')) script.call('onCreate');
+				if (script != null && script.exists('onCreate')) script.call('onCreate');
 			}
+		}
 		#end
 	}
 
@@ -39,18 +43,24 @@ class ScriptedState extends FlxState
         if (ClientPrefs.data.allowReloadState) {
             if (controls.RELOAD_STATE) {
 				trace('Reloading State...');
-                #if HSCRIPT_ALLOWED
-                if (hscriptArray != null)
-                {
-                    for (script in hscriptArray)
-                        if (script != null)
-                        {
-                            if (script.exists('onReloadState')) script.call('onReloadState');
-                            script.destroy();
-                        }
-                    hscriptArray = [];
-                }
-                #end
+				#if HSCRIPT_ALLOWED
+				if (hscript != null)
+				{
+					if (hscript.exists('onReloadState')) hscript.call('onReloadState');
+					hscript.destroy();
+					hscript = null;
+				}
+
+				if (hscriptArray != null)
+				{
+					for (script in hscriptArray)
+						if (script != null)
+						{
+							script.destroy();
+						}
+					hscriptArray = [];
+				}
+				#end
                 
                 MusicBeatState.switchState(MusicBeatState.getState());
                 return;
@@ -60,11 +70,16 @@ class ScriptedState extends FlxState
 		super.update(elapsed);
 
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
+		// Suspend state HScript callbacks while a substate is active
+		if (subState == null)
+		{
+			if (hscript != null && hscript.exists('onUpdate')) hscript.call('onUpdate', [elapsed]);
+			if (hscriptArray != null)
 			{
-				if(script.exists('onUpdate')) script.call('onUpdate', [elapsed]);
+				for (script in hscriptArray)
+					if (script != null && script.exists('onUpdate')) script.call('onUpdate', [elapsed]);
 			}
+		}
 		#end
     }
 
@@ -72,14 +87,22 @@ class ScriptedState extends FlxState
         super.destroy();
 
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray)
-			if(script != null)
-			{
-				if(script.exists('onDestroy')) script.call('onDestroy');
-				script.destroy();
-			}
-
-		hscriptArray = null;
+		if (hscript != null)
+		{
+			if(hscript.exists('onDestroy')) hscript.call('onDestroy');
+			hscript.destroy();
+			hscript = null;
+		}
+		if (hscriptArray != null)
+		{
+			for (script in hscriptArray)
+				if (script != null)
+				{
+					if (script.exists('onDestroy')) script.call('onDestroy');
+					script.destroy();
+				}
+			hscriptArray = [];
+		}
 		#end
     }
 
@@ -106,10 +129,7 @@ class ScriptedState extends FlxState
 
 		if(doPush)
 		{
-			if(Iris.instances.exists(scriptFile))
-				doPush = false;
-
-			if(doPush) initHScript(scriptFile);
+			if(!Iris.instances.exists(scriptFile)) initHScript(scriptFile);
 		}
 		#end
     }
@@ -142,27 +162,32 @@ class ScriptedState extends FlxState
 			newScript = new HScript(null, file);
 			if (newScript.exists('onCreate')) newScript.call('onCreate');
 			trace('initialized hscript interp successfully: $file');
-			hscriptArray.push(newScript);
+			hscript = newScript;
 		}
 		catch(e:IrisError)
 		{
 			var pos:HScriptInfos = cast {fileName: file, showLine: false};
 			Iris.error(Printer.errorToString(e, false), pos);
-			var newScript:HScript = cast (Iris.instances.get(file), HScript);
-			if(newScript != null)
-				newScript.destroy();
+			var existing:HScript = cast (Iris.instances.get(file), HScript);
+			if(existing != null)
+				existing.destroy();
+			hscript = null;
 		}
 	}
 
 	public function setOnHScript(variable:String, arg:Dynamic, exclusions:Array<String> = null) {
 		#if HSCRIPT_ALLOWED
 		if(exclusions == null) exclusions = [];
-		for (script in hscriptArray) {
-			if(exclusions.contains(script.origin))
-				continue;
-
-			script.set(variable, arg);
+		if (hscriptArray != null)
+		{
+			for (script in hscriptArray)
+			{
+				if (script == null) continue;
+				if (exclusions.contains(script.origin)) continue;
+				script.set(variable, arg);
+			}
 		}
+		if (hscript != null && !exclusions.contains(hscript.origin)) hscript.set(variable, arg);
 		#end
 	}
 
@@ -170,33 +195,55 @@ class ScriptedState extends FlxState
 		var returnVal:Dynamic = LuaUtils.Function_Continue;
 
 		#if HSCRIPT_ALLOWED
+		// If a substate is open, suspend calling HScript callbacks on the state
+		if (subState != null)
+			return returnVal;
+
 		if(exclusions == null) exclusions = new Array();
 		if(excludeValues == null) excludeValues = new Array();
 		excludeValues.push(LuaUtils.Function_Continue);
 
-		var len:Int = hscriptArray.length;
-		if (len < 1)
-			return returnVal;
-
-		for(script in hscriptArray)
+		// First, try scripts in the array (if any)
+		if (hscriptArray != null)
 		{
-			@:privateAccess
-			if(script == null || !script.exists(funcToCall) || exclusions.contains(script.origin))
-				continue;
-
-			var callValue = script.call(funcToCall, args);
-			if(callValue != null)
+			for (script in hscriptArray)
 			{
-				var myValue:Dynamic = callValue.returnValue;
+				@:privateAccess
+				if(script == null || !script.exists(funcToCall) || (exclusions != null && exclusions.contains(script.origin)))
+					continue;
 
-				if((myValue == LuaUtils.Function_StopHScript || myValue == LuaUtils.Function_StopAll) && !excludeValues.contains(myValue) && !ignoreStops)
+				var callValue = script.call(funcToCall, args);
+				if(callValue != null)
 				{
-					returnVal = myValue;
-					break;
+					var myValue:Dynamic = callValue.returnValue;
+
+					if((myValue == LuaUtils.Function_StopHScript || myValue == LuaUtils.Function_StopAll) && !excludeValues.contains(myValue) && !ignoreStops)
+					{
+						returnVal = myValue;
+						break;
+					}
+
+					if(myValue != null && !excludeValues.contains(myValue))
+						returnVal = myValue;
+				}
+			}
+		}
+
+		// Then single hscript fallback
+		if (hscript != null && !((exclusions != null) && exclusions.contains(hscript.origin)) && hscript.exists(funcToCall))
+		{
+			var callValue2 = hscript.call(funcToCall, args);
+			if(callValue2 != null)
+			{
+				var myValue2:Dynamic = callValue2.returnValue;
+
+				if((myValue2 == LuaUtils.Function_StopHScript || myValue2 == LuaUtils.Function_StopAll) && !excludeValues.contains(myValue2) && !ignoreStops)
+				{
+					returnVal = myValue2;
 				}
 
-				if(myValue != null && !excludeValues.contains(myValue))
-					returnVal = myValue;
+				if(myValue2 != null && !excludeValues.contains(myValue2))
+					returnVal = myValue2;
 			}
 		}
 		#end
@@ -212,8 +259,7 @@ class ScriptedState extends FlxState
 		if(exclusions == null) exclusions = [];
 		if(excludeValues == null) excludeValues = [LuaUtils.Function_Continue];
 
-		// var result:Dynamic = callOnLuas(funcToCall, args, ignoreStops, exclusions, excludeValues);
-		var result:Dynamic = null;
+		var result:Dynamic = PlayState.instance.callOnLuas(funcToCall, args, ignoreStops, exclusions, excludeValues);
 		if(result == null || excludeValues.contains(result)) result = callOnHScript(funcToCall, args, ignoreStops, exclusions, excludeValues);
 		return result;
 	}

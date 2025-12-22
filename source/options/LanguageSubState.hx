@@ -116,14 +116,18 @@ class LanguageSubState extends MusicBeatSubstate
 				MusicBeatState.resetState();
 			}
 			else close();
+			camera.zoom = 1;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 
 		if(controls.ACCEPT)
 		{
+			FlxTween.cancelTweensOf(camera);
+			camera.flash(0xFFFFFF, 0.75);
+			camera.zoom = 1.25;
+			FlxTween.tween(camera, {zoom: 1}, 0.75, {ease: FlxEase.cubeOut});
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.6);
 			ClientPrefs.data.language = languages[curSelected];
-			//trace(ClientPrefs.data.language);
 			ClientPrefs.saveSettings();
 			Language.reloadPhrases();
 			changedLanguage = true;

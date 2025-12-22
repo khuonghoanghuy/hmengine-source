@@ -66,16 +66,22 @@ class OptionsState extends MusicBeatState
 		{
 			var optionText:Alphabet = new Alphabet(0, 0, Language.getPhrase('options_$option', option), true);
 			optionText.screenCenter();
-			optionText.y += (92 * (num - (options.length / 2))) + 45;
+
+			optionText.y += (54 * (num - (options.length / 2))) + 20;
+			optionText.isMenuItem = true;
+			optionText.changeX = false;
+			optionText.changeY = true;
+			optionText.distancePerItem = new FlxPoint(0, 54);
+			optionText.startPosition.x = optionText.x;
+			optionText.startPosition.y = optionText.y;
+
+			optionText.targetY = num - curSelected;
+
 			grpOptions.add(optionText);
 		}
 
-		selectorLeft = new Alphabet(0, 0, '>', true);
-		add(selectorLeft);
-		selectorRight = new Alphabet(0, 0, '<', true);
-		add(selectorRight);
-
-		changeSelection();
+		// ensure selectors are positioned for current selection
+		changeSelection(0);
 		ClientPrefs.saveSettings();
 
 		super.create();
@@ -111,25 +117,23 @@ class OptionsState extends MusicBeatState
 		}
 		else if (controls.ACCEPT) openSelectedSubstate(options[curSelected]);
 	}
-	
+
 	function changeSelection(change:Int = 0)
 	{
-		curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
+		curSelected = CoolUtil.clamp(curSelected + change, 0, options.length - 1);
 
 		for (num => item in grpOptions.members)
 		{
+			if (item == null) continue;
 			item.targetY = num - curSelected;
 			item.alpha = 0.6;
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
-				selectorLeft.x = item.x - 63;
-				selectorLeft.y = item.y;
-				selectorRight.x = item.x + item.width + 15;
-				selectorRight.y = item.y;
 			}
 		}
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+
+		if (change != 0) FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
 
 	override function destroy()

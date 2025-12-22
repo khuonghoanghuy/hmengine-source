@@ -186,4 +186,52 @@ class CoolUtil
 		if (value > max) return max;
 		return value;
 	}
+
+	public static function flxKeyToOpenFL(key:String):Int
+	{
+		switch (key.toUpperCase())
+		{
+			case "F1": return 112;
+			case "F2": return 113;
+			case "F3": return 114;
+			case "F4": return 115;
+			case "F5": return 116;
+			case "F6": return 117;
+			case "F7": return 118;
+			case "F8": return 119;
+			case "F9": return 120;
+			case "F10": return 121;
+			case "F11": return 122;
+			case "F12": return 123;
+			case "ENTER": return 13;
+			case "ESCAPE": return 27;
+			case "BACKSPACE": return 8;
+			case "TAB": return 9;
+			case "SPACE": return 32;
+			case "INSERT": return 45;
+			case "DELETE": return 46;
+			case "HOME": return 36;
+			case "END": return 35;
+			case "PAGEUP": return 33;
+			case "PAGEDOWN": return 34;
+			case "LEFT": return 37;
+			case "UP": return 38;
+			case "RIGHT": return 39;
+			case "DOWN": return 40;
+			default:
+				if (key.length == 1)
+				{
+					var charCode = key.toUpperCase().charCodeAt(0);
+					if (charCode >= 65 && charCode <= 90) // A-Z
+						return charCode;
+				}
+				else if (key.length == 1 && key >= "0" && key <= "9")
+				{
+					return key.charCodeAt(0);
+				}
+				
+				trace('Key "$key" not exists');
+				return -1;
+		}
+	}
 }

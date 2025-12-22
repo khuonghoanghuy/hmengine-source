@@ -205,7 +205,8 @@ class Main extends Sprite
 
 	function onKeyDown(event:KeyboardEvent)
 	{
-		if (event.keyCode == 113) {
+		var keyBind = ClientPrefs.keyBinds.get("open_console");
+		if (keyBind != null && event.keyCode == CoolUtil.flxKeyToOpenFL(keyBind[0])) {
 			backend.Native.showConsole(ClientPrefs.data.allowConsole);
 		}
 	}

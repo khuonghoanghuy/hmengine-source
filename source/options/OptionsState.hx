@@ -76,6 +76,7 @@ class OptionsState extends MusicBeatState
 			optionText.startPosition.y = optionText.y;
 
 			optionText.targetY = num - curSelected;
+			optionText.snapToPosition();
 
 			grpOptions.add(optionText);
 		}

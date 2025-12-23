@@ -138,14 +138,14 @@ class MasterEditorMenu extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(Paths.sound('scrollMenu'));
 		curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
 	}
 
 	#if MODS_ALLOWED
 	function changeDirectory(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(Paths.sound('scrollMenu'));
 
 		curDirectory += change;
 

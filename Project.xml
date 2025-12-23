@@ -32,10 +32,11 @@
 	<define name="SHOW_LOADING_SCREEN" />
 	<define name="PSYCH_WATERMARKS"/> <!-- DELETE THIS TO REMOVE THE PSYCH LOGO FROM LOADING SCREEN -->
 
+	<define name="VIDEOS_ALLOWED" if="windows || linux || android || mac" unless="32bits"/> <!-- IF YOU WANT TO USE VIDEOS ON YOUR SOURCE MOD, GET THIS LINE OUTSIDE OF THE SECTION -->
+
 	<section if="officialBuild">
 		<define name="TITLE_SCREEN_EASTER_EGG"/>
 		<define name="BASE_GAME_FILES" />
-		<define name="VIDEOS_ALLOWED" if="windows || linux || android || mac" unless="32bits"/> <!-- IF YOU WANT TO USE VIDEOS ON YOUR SOURCE MOD, GET THIS LINE OUTSIDE OF THE SECTION -->
 	</section>
 
 	<!-- ____________________________ Window Settings ___________________________ -->
@@ -112,7 +113,7 @@
 
 	<!--Psych stuff needed-->
 	<haxelib name="linc_luajit" if="LUA_ALLOWED" />
-	<haxelib name="hxvlc" if="VIDEOS_ALLOWED" version="2.0.1" />
+	<haxelib name="hxvlc" version="2.1.0" if="VIDEOS_ALLOWED" />
 	<haxelib name="hxdiscord_rpc" version="1.2.4" if="DISCORD_ALLOWED" />
 	<haxelib name="flxanimate" />
 
@@ -195,4 +196,9 @@
 	<icon path="art/icons/icon32.png" size='32'/>
 	<icon path="art/icons/icon64.png" size='64'/>
 	<icon path="art/icons/iconOG.png" />
+
+	<haxeflag name="-dce" value="no" />
+
+	<haxeflag name="--macro" value="nullSafety('hxvlc')" />
+	<haxeflag name="--macro" value="include('openfl.utils._internal.ExtraParamsMacro')" />
 </project>
